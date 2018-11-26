@@ -13,7 +13,6 @@ imageName = './TestImages/im1.jpg';
 % Convert to grayscale and then to double
 im = im2double( rgb2gray( imread(imageName) ) );
 
-%% Testing the FindLocalExtrema function
 %% Call the SIFT algorithm to get interest points
 [xPoints, yPoints] = SIFT(im);
 
@@ -23,6 +22,7 @@ imshow(im);
 plot(xPoints, yPoints, 'rx');
 legend('Interest Points');
 
+%% Testing the FindLocalExtrema function
 
 % 
 % % ------------ 2,2,2 Local Extrema ----

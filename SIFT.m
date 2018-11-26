@@ -46,4 +46,7 @@ for i = 1:length(DoG)
 end
 
 %% Find Local Extrema
+[Row, Col, Index] = FindLocalExtrema(DoG);
+
+% Plot the local extrema on the original image
 end
