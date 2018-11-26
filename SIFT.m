@@ -45,4 +45,5 @@ for i = 1:length(DoG)
     title(t);
 end
 
+%% Find Local Extrema
 end
