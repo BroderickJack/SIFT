@@ -15,11 +15,11 @@ Row = [];
 Col = [];
 Index = [];
 
-for i = 2:(length(DifferenceOfGaussian) - 1)
+for i = 1:length(DifferenceOfGaussian)
     % Loop through all of the scales
-    pre = DifferenceOfGaussian{i-1};
+    pre = DifferenceOfGaussian{max(i-1,1)};
     cur = DifferenceOfGaussian{i};
-    nex = DifferenceOfGaussian{i+1};
+    nex = DifferenceOfGaussian{min(i+1,length(DifferenceOfGaussian)-1)};
     
     % Loop through all of the points in the current difference of gaussian
     for j = 2:(length(cur(:,1))-1)
@@ -41,10 +41,17 @@ for i = 2:(length(DifferenceOfGaussian) - 1)
                 row = rows(r);
                 for c = 1:length(cols)
                     col = cols(c);
-                    if (pre(r,c) > p && isMax) || (pre(r,c) < p && ~isMax)
+                    if (pre(row,col) > p && isMax) || (pre(row,col) < p && ~isMax)
                         ext = 0; % The point is not an extrema
                         break;
+                    elseif (cur(row,col) > p && isMax) || (cur(row,col) < p && ~isMax)
+                        ext = 0; 
+                        break;
+                    elseif (nex(row,col) > p && isMax) || (nex(row,col) < p && ~isMax)
+                        ext = 0;
+                        break;
                     end
+                    
                     if(~ext)
                         break;
                     end

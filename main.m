@@ -7,12 +7,16 @@ clear; clc; close all;
 
 
 %% Define the variables
-% imageName = './TestImages/im1.jpg';
-imageName = './TestImages/im2.jpg';
+imageName = './TestImages/im1.jpg';
+% imageName = './TestImages/im2.jpg';
 
 %% Load the image
 % Convert to grayscale and then to double
-im = im2double( rgb2gray( imread(imageName) ) );
+im = imread(imageName);
+im = rgb2gray(im);
+% im = imresize(im, [450, 450]);
+im = im2double(im);
+% im = im2double( rgb2gray( resize(imread(imageName), [450,450]) ) );
 
 %% Call the SIFT algorithm to get interest points
 [xPoints, yPoints] = SIFT(im);
