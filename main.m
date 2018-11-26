@@ -7,7 +7,8 @@ clear; clc; close all;
 
 
 %% Define the variables
-imageName = './TestImages/im1.jpg';
+% imageName = './TestImages/im1.jpg';
+imageName = './TestImages/im2.jpg';
 
 %% Load the image
 % Convert to grayscale and then to double

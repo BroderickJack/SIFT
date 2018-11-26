@@ -22,9 +22,32 @@ figure();
 for i = 1:length(SIGMA)
     subplot(l, 1, i);
     imshow(G_sigma{i});
-    t = sprintf('\sigma = %
-    title('Image');
-%     title(sprintf('\sigma = %i', i));
+    t = sprintf('%s = %i', '\sigma', SIGMA(i));
+    title(t);
 end
 
+%% Compute the difference of gaussian for each set of images
+DoG = {};
+for i = 1:length(SIGMA)-1
+    DoG{i} = G_sigma{i+1} - G_sigma{i};
+%     size(DoG{i})
+end
+
+% Plot the difference of gaussian
+figure();
+l = length(DoG);
+for i = 1:length(DoG) 
+    subplot(l, 1, i);
+    % Try viewing with the difference of gaussian normalized
+%     imshow(DoG{i});
+    imshow(DoG{i}, []);
+    t = sprintf('(%s = %i) - (%s = %i)', '\sigma', SIGMA(i+1), '\sigma',SIGMA(i));
+    title(t);
+end
+
+%% Find Local Extrema
+[Row, Col, Index] = FindLocalExtrema(DoG);
+colors = distinguishable_colors(length(DoG)); % Get colors for e
+
+% Plot the local extrema on the original image
 end

@@ -47,6 +47,13 @@ end
 
 %% Find Local Extrema
 [Row, Col, Index] = FindLocalExtrema(DoG);
+colors = distinguishable_colors(length(DoG)); % Get colors for each scale
+
+figure(); hold on;
+imshow(im);
+for i = 1:length(Row)
+    plot(Col(i), Row(i), 'Color', colors(Index(i)), 'Marker', 'x');
+end
 
 % Plot the local extrema on the original image
 end
