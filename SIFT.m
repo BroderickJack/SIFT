@@ -46,7 +46,7 @@ for i = 1:length(DoG)
 end
 
 %% Find Local Extrema
-[Row, Col, Index] = FindLocalExtrema(DoG)
+[Row, Col, Index] = FindLocalExtrema(DoG);
 colors = distinguishable_colors(length(DoG)); % Get colors for each scale
 
 figure(); hold on;
@@ -61,4 +61,17 @@ title('Local Extrema');
 % end
 
 % Plot the local extrema on the original image
+
+%% Eliminate The Edge Responses Using The Sobel Filter
+% Find the gradient using the sobel filter
+[R,C,I] = EliminateEdgeResponse(Row, Col, Index, DoG);
+figure(); 
+imshow(im); hold on; 
+for i = 1:length(R)
+    plot(C(i), R(i), 'Color', colors(I(i),:), 'Marker', '.', 'MarkerSize', 1);
+end
+title('Local Extrema: Removed Edges');
+
+fprintf('Number of keypoints with edges: %i\n', length(Row));
+fprintf('Number of keypoints endges removed: %i\n', length(R));
 end
