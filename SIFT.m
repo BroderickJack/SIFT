@@ -74,4 +74,7 @@ title('Local Extrema: Removed Edges');
 
 fprintf('Number of keypoints with edges: %i\n', length(Row));
 fprintf('Number of keypoints endges removed: %i\n', length(R));
+
+%% Assign Orientation for Each Point
+
 end
