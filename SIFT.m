@@ -76,5 +76,9 @@ fprintf('Number of keypoints with edges: %i\n', length(Row));
 fprintf('Number of keypoints endges removed: %i\n', length(R));
 
 %% Assign Orientation for Each Point
+Points = AssignOrientation(Row, Col, Index, DoG, SIGMA, im);
 
+% Visualize the orientation of each of the points
+figure(); imshow(im); hold on;
+plot(Points, 'showOrientation', true);
 end

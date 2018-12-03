@@ -8,8 +8,8 @@ function [Points] = AssignOrientation(Row, Col, Index, DoG, Sigma, Im)
 %       the scale is at index
 %   Im          - The original image
 % OUPTUTS 
-%   Points -  SURFPoints object that has an entry for each of the interest
-%       points with Location, Orientation, and Scale information
+%   Points - Array containing the orientation, in radians, of each of
+%       the interest points
 
 % This function assigns an orientation for each of the interest points 
 
@@ -80,7 +80,7 @@ for i = 1:length(Row)
     % interest point for each one
     for j = 1:length(possiblePoints)
         Location = [Location; c, r];
-        Scale = [Scale; Sigma(Index(i))];
+        Scale = [Scale; Sigma(index(i))];
         Orientation = [Orientation; possiblePoints(j)];
     end
     
@@ -100,8 +100,5 @@ for i = 1:length(Row)
         figure(); bar(EDGES, h); title('Weighted histogram');
     end
 end
-
-% Create the SURFPoints object
-Points = SURFPoints(Location, 'Scale', Scale, 'Orientation', Orientation);
 
 end

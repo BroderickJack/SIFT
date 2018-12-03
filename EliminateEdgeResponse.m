@@ -18,7 +18,7 @@ Col = [];
 Index = [];
 
 %% Parameters
-r = 10; % The ratio for eliminating keypoints that are along edges 
+r = 5; % The ratio for eliminating keypoints that are along edges 
 
 %% Compute the sobel second derivatives for each element in DoG
 Dxx = {}; Dxy = {}; Dyx = {}; Dyy = {};
