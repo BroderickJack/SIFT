@@ -85,7 +85,7 @@ for i = 1:length(Row)
     end
     
     
-    if( i == 5 )
+    if( i == 1 )
         % We only want to plot one image
         figure(); imshow(Im);
         figure(); imshow(imFilt); title('Filtered with 1/\sigma'); hold on;

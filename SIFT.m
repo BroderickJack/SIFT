@@ -26,6 +26,15 @@ for i = 1:length(SIGMA)
     title(t);
 end
 
+figure();
+for i = 1:length(SIGMA)
+    subplot(2, 3, i);
+    imshow(G_sigma{i});
+    t = sprintf('%s = %i', '\sigma', SIGMA(i));
+    title(t);
+end
+
+
 %% Compute the difference of gaussian for each set of images
 DoG = {};
 for i = 1:length(SIGMA)-1
@@ -38,6 +47,16 @@ figure();
 l = length(DoG);
 for i = 1:length(DoG) 
     subplot(l, 1, i);
+    % Try viewing with the difference of gaussian normalized
+%     imshow(DoG{i});
+    imshow(DoG{i}, []);
+    t = sprintf('(%s = %i) - (%s = %i)', '\sigma', SIGMA(i+1), '\sigma',SIGMA(i));
+    title(t);
+end
+
+figure()
+for i = 1:length(DoG) 
+    subplot(2, 2, i);
     % Try viewing with the difference of gaussian normalized
 %     imshow(DoG{i});
     imshow(DoG{i}, []);
