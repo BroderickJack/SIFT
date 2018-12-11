@@ -1,9 +1,3 @@
-function [P, Descriptors] = SIFT(im)
-% INPUTS
-%   im: nxm array of points in a grayscale image
-% OUTPUTS
-%   xPoints: X-coordinates of the interest points
-%   yPoints: Y-coordinates of the interest points
 
 clear('-except im');
 close all;
@@ -127,5 +121,3 @@ plot(Points, 'showOrientation', true);
 fprintf('Number of points before: %i\n', length(Points));
 fprintf('Number of points after: %i\n', length(P));
 
-
-end

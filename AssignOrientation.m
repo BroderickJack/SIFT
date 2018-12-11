@@ -32,9 +32,9 @@ for i = 1:length(Sigma)
     imFilt = imgaussfilt(Im, 1.0/Sigma(i));
     
     % Calculate the gradient for the filtered image
-    [Gx, Gy] = imgradientxy(Im, 'sobel');
+    [Gx, Gy] = imgradientxy(imFilt, 'sobel');
     gMags{i} = sqrt(Gx.^2 + Gy.^2);
-    gOrientations{i} = atan(Gy./Gx);
+    gOrientations{i} = atan(Gy./Gx); % atan returns a result in radians
 end
 
 %% Loop through all of the points
@@ -53,9 +53,19 @@ for i = 1:length(Row)
     orientations = [];
     magnitudes = [];
     count = 1;
+    
+    % Create a matrix of gradient magnitudes
+    magnitude = [];
+    neighborhood = [];
+    orientation = [];
+    val = []; weight = [];
     for( ro = (max(1, r-4)):(min(maxRow,r+4)) )
         % We want to loop through the rows +/- 4 from the interest point
+        magRow = [];
+        neighborRow = [];
+        oRow = [];
         for co = (max(1, c-4)):(min(maxCol,c+4))
+
             % Loop through the columns +/- from the interest point
             gM = gMag(ro, co); % The magnitude at the pixel
             gO = gOrientation(ro, co); % The orientation at the pixel
@@ -64,11 +74,22 @@ for i = 1:length(Row)
             magnitudes(count) = gM;
             orientations(count) = gO;
             count = count + 1;
+            
+            magRow = [magRow, gM];
+            neighborRow = [neighborRow, imFilt(ro, co)];
+            oRow = [oRow, gO];
+            
+            % Create vector for the weighted histogram
+            val = [val, gO];
+            weight = [weight, gM];
         end
+        magnitude = [magnitude; magRow];
+        neighborhood = [neighborhood; neighborRow];
+        orientation = [orientation; oRow];
     end
-    
+
     % Apply the weights to the histogram
-    h = weightedhistc(orientations, magnitudes, EDGES);
+    h = weightedhistc(val, weight, EDGES);
     
     % Find the orientation with the highest number of occurances
     [Y, I] = max(h); % Get the maximum value Y a tthe index I
@@ -81,11 +102,15 @@ for i = 1:length(Row)
     for j = 1:length(possiblePoints)
         Location = [Location; c, r];
         Scale = [Scale; Sigma(Index(i))];
-        Orientation = [Orientation; possiblePoints(j)];
+        % Lower bound on orientation
+        o1 = EDGES(possiblePoints(max(1,j)));
+        o2 = EDGES(possiblePoints(min(j+1, end)));
+        o = mean([o1, o2]);
+        Orientation = [Orientation; o];
     end
     
     
-    if( i == 1 )
+    if( r == 954 && c == 688 )
         % We only want to plot one image
         figure(); imshow(Im);
         figure(); imshow(imFilt); title('Filtered with 1/\sigma'); hold on;
@@ -98,10 +123,45 @@ for i = 1:length(Row)
         
         % Show the weighted hist
         figure(); bar(EDGES, h); title('Weighted histogram');
+        
+        % Show the gradient magnitude in the neighborhood        
+        figure(); 
+        imshow(magnitude, []);
+        title('Gradient magnitude in neighborhood');
+        
+        set(gcf,'PaperPositionMode', 'auto');
+        set(gcf, 'ResizeFcn', 'resize_fcn');
+        resize_fcn
+        
+        % Show the neighborhood around the point        
+        figure(); 
+        imshow(neighborhood, []);
+        title('Neighborhood around the interest point');
+        
+        set(gcf,'PaperPositionMode', 'auto');
+        set(gcf, 'ResizeFcn', 'resize_fcn');
+        resize_fcn
+        
+        for x = 1:length(possiblePoints)
+            % Lower bound on orientation
+            o1 = EDGES(possiblePoints(max(1,j)));
+            o2 = EDGES(possiblePoints(min(j+1, end)));
+            o = mean([o1, o2]);
+            fprintf('The orientaion of this point: %0.2f', o); 
+        end
     end
 end
 
 % Create the SURFPoints object
 Points = SURFPoints(Location, 'Scale', Scale, 'Orientation', Orientation);
 
+end
+
+% Function for resizing the image
+
+function resize_fcn
+set(gcf,'units','pixels');
+set(gca,'units','pixels');
+w_pos = get(gcf, 'position');
+set(gca, 'position', [0 0 w_pos(3) w_pos(4)]);
 end

@@ -18,8 +18,8 @@ Col = [];
 Index = [];
 
 %% Parameters
-r = 5; % The ratio for eliminating keypoints that are along edges 
-
+r = 10; % The ratio for eliminating keypoints that are along edges 
+eigThresh = 4; % Maximum eigen value threshold
 %% Compute the sobel second derivatives for each element in DoG
 Dxx = {}; Dxy = {}; Dyx = {}; Dyy = {};
 for i = 1:length(DoG)
@@ -29,21 +29,38 @@ for i = 1:length(DoG)
     [Dyx{i}, Dyy{i}] = imgradientxy(Gy, 'sobel');   
 end
 
-%% Find the hessian for all of the keypoints 
+%% Find the hessian for all of the keypoints
+% Find what the values of (Tr(H)^2)/det(H) are
+vals = [];
 for i = 1:length(R)
     index = I(i);
     dXX = Dxx{index}; dXY = Dxy{index}; dYX = Dyx{index}; dYY = Dyy{index};
     r = R(i); c = C(i);
+    
+    if (r == 682 && c == 289)
+        fprintf('Stop here');
+        
+    end
     H = [dXX(r,c), dXY(r,c);
          dXY(r,c), dYY(r,c)];
-     
-    if(((trace(H)^2) / det(H)) < ((r + 1)^2)/r)
+%     H = [dXX(c,r), dXY(c,r);
+%          dXY(c,r), dYY(c,r)];
+%     vals = [vals,((trace(H)^2) / det(H))];
+vals = [vals, mean(eig(H))];
+%     if(((trace(H)^2) / det(H)) < ((r + 1)^2)/r)
+    if any(eig(H) > eigThresh)
+% Use the eigen-value 
+
         % This point is not an edge
         Row = [Row, r];
         Col = [Col, c];
         Index = [Index, index];
     end
 end
+
+% Plot a histogram of the values
+figure();
+histogram(vals);
 
 
    

@@ -35,8 +35,7 @@ for i = 1:length(Points1)
     D1 = Descriptors1(i,:);
     
     if any(isnan(D1))
-       matched{i} = Points2(1);
-       continue;
+       matched{i
     end
     
     % Save the minimum distance and the index in points 2
@@ -55,7 +54,7 @@ for i = 1:length(Points1)
     matched{i} = Points2(minI);
 end
 
-%% Now we must plot the correspondance points
+% Now we must plot the correspondance points
 % Combine the images into a single image
 imComb = [im, im2];
 figure();
@@ -64,16 +63,15 @@ title('Plotting correspondance points');
 
 xGain = length(im(1,:)); % The gain to add to all of the column values for image 1
 
-%
 for i = 1:length(Points1)
     p1 = Points1(i).Location;
     p2 = matched{i}.Location;
     
-    y1 = p1(2); x1 = p1(1);
-    y2 = p2(2); x2 = p2(1) + xGain;
+    y1 = p1(1); x1 = p1(2);
+    y2 = p2(1); x2 = p2(2) + xGain;
     
     % Plot the line between the two points
-    plot([x1, x2], [y1, y2], 'rx-');
+    plot(x1, y1, x2, y2);
 end
 
 %% Testing the FindLocalExtrema function
